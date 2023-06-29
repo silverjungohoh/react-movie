@@ -10,32 +10,45 @@ const KEY_E = process.env.REACT_APP_MOVIE_API_KEY;
 function App() {
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const query = "harry";
+  const query = "zczx";
 
   const getMovieData = async () => {
     setIsLoading(true);
-    const initialData = await fetch(
-      `https://www.omdbapi.com/?apikey=${KEY_E}&s=${query}`
-    )
-      .then((res) => res.json())
-      .then((data) => data.Search)
-      .catch((err) => console.log(err));
-
-    const movieData = initialData.slice().map((it) => {
-      return {
-        id: it.imdbID,
-        title: it.Title,
-        poster: it.Poster,
-        year: it.Year,
-      };
-    });
-    setMovies(movieData);
-    setIsLoading(false);
+    await fetch(`https://www.omdbapi.com/?apikey=${KEY_E}&s=${query}`)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Something went wrong! You can't get data");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        if (data.Response === "False") {
+          throw new Error("Movies not found!");
+        }
+        setMovies(
+          data.Search.slice().map((it) => {
+            return {
+              id: it.imdbID,
+              title: it.Title,
+              poster: it.Poster,
+              year: it.Year,
+            };
+          })
+        );
+      })
+      .catch((err) => {
+        setError(err.message);
+        console.log(err.message);
+      })
+      .finally(() => setIsLoading(false));
   };
 
   useEffect(() => {
-    getMovieData();
+    setTimeout(() => {
+      getMovieData();
+    }, 1000);
   }, []);
 
   return (
@@ -44,7 +57,11 @@ function App() {
         <NumResults movies={movies} />
       </NavBar>
       <Main>
-        <Box>{isLoading ? <Loader /> : <MovieList movies={movies} />}</Box>
+        <Box>
+          {isLoading && <Loader />}
+          {!isLoading && !error && <MovieList movies={movies} />}
+          {error && <ErrorMessage message={error} />}
+        </Box>
       </Main>
     </div>
   );
@@ -52,6 +69,14 @@ function App() {
 
 function Loader() {
   return <p className="loader">Loading...</p>;
+}
+
+function ErrorMessage({ message }) {
+  return (
+    <p className="error">
+      <span>🚫</span> {message}
+    </p>
+  );
 }
 
 export default App;
