@@ -4,6 +4,7 @@ import MovieList from "./MovieList";
 import NavBar from "./NavBar";
 import NumResults from "./NumResults";
 import Main from "./Main";
+import Search from "./Search";
 
 const KEY_E = process.env.REACT_APP_MOVIE_API_KEY;
 
@@ -11,11 +12,11 @@ function App() {
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-
-  const query = "zczx";
+  const [query, setQuery] = useState("");
 
   const getMovieData = async () => {
     setIsLoading(true);
+    setError("");
     await fetch(`https://www.omdbapi.com/?apikey=${KEY_E}&s=${query}`)
       .then((res) => {
         if (!res.ok) {
@@ -42,18 +43,25 @@ function App() {
         setError(err.message);
         console.log(err.message);
       })
-      .finally(() => setIsLoading(false));
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   useEffect(() => {
-    setTimeout(() => {
-      getMovieData();
-    }, 1000);
-  }, []);
+    if (query.length < 3) {
+      setMovies([]);
+      setError("");
+      return;
+    }
+    getMovieData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query]);
 
   return (
     <div className="App">
       <NavBar>
+        <Search query={query} setQuery={setQuery} />
         <NumResults movies={movies} />
       </NavBar>
       <Main>
