@@ -9,10 +9,12 @@ const KEY_E = process.env.REACT_APP_MOVIE_API_KEY;
 
 function App() {
   const [movies, setMovies] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const query = "harry";
 
   const getMovieData = async () => {
+    setIsLoading(true);
     const initialData = await fetch(
       `https://www.omdbapi.com/?apikey=${KEY_E}&s=${query}`
     )
@@ -29,6 +31,7 @@ function App() {
       };
     });
     setMovies(movieData);
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -41,12 +44,14 @@ function App() {
         <NumResults movies={movies} />
       </NavBar>
       <Main>
-        <Box>
-          <MovieList movies={movies} />
-        </Box>
+        <Box>{isLoading ? <Loader /> : <MovieList movies={movies} />}</Box>
       </Main>
     </div>
   );
+}
+
+function Loader() {
+  return <p className="loader">Loading...</p>;
 }
 
 export default App;
