@@ -8,6 +8,7 @@ import Search from "./Search";
 import Loader from "./Loader";
 import ErrorMessage from "./ErrorMessage";
 import MovieDetails from "./MovieDetails";
+import WatchedMovieList from "./WatchedMovieList";
 
 const KEY_E = process.env.REACT_APP_MOVIE_API_KEY;
 
@@ -103,7 +104,9 @@ function App() {
               watchedMovies={watchedMovies}
             />
           ) : (
-            <></>
+            <>
+              <WatchedMovieList watchedMovies={watchedMovies} />
+            </>
           )}
         </Box>
       </Main>

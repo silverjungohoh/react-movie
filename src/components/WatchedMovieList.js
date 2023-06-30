@@ -1,10 +1,10 @@
 import WatchedMovie from "./WatchedMovie";
 
-function WatchedMovieList({ watched }) {
+function WatchedMovieList({ watchedMovies }) {
   return (
     <ul className="list">
-      {watched.map((movie) => (
-        <WatchedMovie movie={movie} />
+      {watchedMovies.map((movie) => (
+        <WatchedMovie movie={movie} key={movie.id} />
       ))}
     </ul>
   );
