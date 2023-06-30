@@ -7,6 +7,7 @@ import Main from "./Main";
 import Search from "./Search";
 import Loader from "./Loader";
 import ErrorMessage from "./ErrorMessage";
+import MovieDetails from "./MovieDetails";
 
 const KEY_E = process.env.REACT_APP_MOVIE_API_KEY;
 
@@ -19,6 +20,10 @@ function App() {
 
   function handleSelectMovie(id) {
     setSelectedId((selectedId) => (id === selectedId ? "" : id));
+  }
+
+  function handleCloseMovie() {
+    setSelectedId("");
   }
 
   const getMovieData = async () => {
@@ -79,7 +84,17 @@ function App() {
           )}
           {error && <ErrorMessage message={error} />}
         </Box>
-        <Box>{selectedId}</Box>
+        <Box>
+          {selectedId ? (
+            <MovieDetails
+              selectedId={selectedId}
+              setSelectedId={setSelectedId}
+              onCloseMovie={handleCloseMovie}
+            />
+          ) : (
+            <></>
+          )}
+        </Box>
       </Main>
     </div>
   );
