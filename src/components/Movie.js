@@ -1,6 +1,11 @@
-function Movie({ movie }) {
+function Movie({ movie, onSelectMovie }) {
   return (
-    <li key={movie.id}>
+    <li
+      style={{ cursor: "pointer" }}
+      onClick={() => {
+        onSelectMovie(movie.id);
+      }}
+    >
       <img src={movie.poster} alt={`${movie.title} poster`} />
       <h3>{movie.title}</h3>
       <div>

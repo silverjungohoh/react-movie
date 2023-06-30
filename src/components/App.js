@@ -15,6 +15,11 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [query, setQuery] = useState("");
+  const [selectedId, setSelectedId] = useState("");
+
+  function handleSelectMovie(id) {
+    setSelectedId((selectedId) => (id === selectedId ? "" : id));
+  }
 
   const getMovieData = async () => {
     setIsLoading(true);
@@ -69,9 +74,12 @@ function App() {
       <Main>
         <Box>
           {isLoading && <Loader />}
-          {!isLoading && !error && <MovieList movies={movies} />}
+          {!isLoading && !error && (
+            <MovieList movies={movies} onSelectMovie={handleSelectMovie} />
+          )}
           {error && <ErrorMessage message={error} />}
         </Box>
+        <Box>{selectedId}</Box>
       </Main>
     </div>
   );
