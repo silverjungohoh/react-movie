@@ -36,6 +36,16 @@ function App() {
     }
   }
 
+  function deleteWatchedMovie(id) {
+    const confirmed = window.confirm("Would you like to delete movie?");
+    if (confirmed) {
+      setWatchedMovies((watchedMovies) =>
+        watchedMovies.filter((movie) => movie.id !== id)
+      );
+      window.alert("Delete Success!");
+    }
+  }
+
   const getMovieData = async () => {
     setIsLoading(true);
     setError("");
@@ -105,7 +115,10 @@ function App() {
             />
           ) : (
             <>
-              <WatchedMovieList watchedMovies={watchedMovies} />
+              <WatchedMovieList
+                watchedMovies={watchedMovies}
+                onDeleteWatched={deleteWatchedMovie}
+              />
             </>
           )}
         </Box>
