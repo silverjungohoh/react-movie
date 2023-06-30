@@ -6,6 +6,7 @@ import NumResults from "./NumResults";
 import Main from "./Main";
 import Search from "./Search";
 import Loader from "./Loader";
+import ErrorMessage from "./ErrorMessage";
 
 const KEY_E = process.env.REACT_APP_MOVIE_API_KEY;
 
@@ -73,14 +74,6 @@ function App() {
         </Box>
       </Main>
     </div>
-  );
-}
-
-function ErrorMessage({ message }) {
-  return (
-    <p className="error">
-      <span>🚫</span> {message}
-    </p>
   );
 }
 
