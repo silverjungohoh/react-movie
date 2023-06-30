@@ -9,6 +9,7 @@ import Loader from "./Loader";
 import ErrorMessage from "./ErrorMessage";
 import MovieDetails from "./MovieDetails";
 import WatchedMovieList from "./WatchedMovieList";
+import WatchedSummary from "./WatchedSummary";
 
 const KEY_E = process.env.REACT_APP_MOVIE_API_KEY;
 
@@ -115,6 +116,7 @@ function App() {
             />
           ) : (
             <>
+              <WatchedSummary watchedMovies={watchedMovies} />
               <WatchedMovieList
                 watchedMovies={watchedMovies}
                 onDeleteWatched={deleteWatchedMovie}
