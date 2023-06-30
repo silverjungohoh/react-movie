@@ -79,6 +79,16 @@ function MovieDetails({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedId]);
 
+  useEffect(() => {
+    if (!title) return;
+    document.title = `Movie | ${title}`;
+
+    return () => {
+      document.title = "UsePopcorn";
+      console.log(`Clean up effect for movie ${title}`);
+    };
+  }, [title]);
+
   return (
     <div className="datails">
       {isLoading && <Loader />}
