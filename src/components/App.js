@@ -5,6 +5,7 @@ import NavBar from "./NavBar";
 import NumResults from "./NumResults";
 import Main from "./Main";
 import Search from "./Search";
+import Loader from "./Loader";
 
 const KEY_E = process.env.REACT_APP_MOVIE_API_KEY;
 
@@ -73,10 +74,6 @@ function App() {
       </Main>
     </div>
   );
-}
-
-function Loader() {
-  return <p className="loader">Loading...</p>;
 }
 
 function ErrorMessage({ message }) {
