@@ -5,15 +5,29 @@ import ErrorMessage from "./ErrorMessage";
 
 const KEY_E = process.env.REACT_APP_MOVIE_API_KEY;
 
-function SelectedMovie({ selectedId, onCloseMovie }) {
+function MovieDetails({
+  selectedId,
+  onCloseMovie,
+  onAddWatched,
+  watchedMovies,
+}) {
   const [movieDetails, setMovieDetails] = useState({});
-  const [movieRating, setMovieRating] = useState(0);
+  const [userRating, setUserRating] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const isWatched = watchedMovies
+    .map((watched) => watched.id)
+    .includes(selectedId);
+
+  const watchedUserRating = watchedMovies.find(
+    (movie) => movie.id === selectedId
+  )?.userRating;
 
   const {
     Title: title,
     Poster: poster,
+    Year: year,
     Runtime: runtime,
     imdbRating,
     Plot: plot,
@@ -22,6 +36,20 @@ function SelectedMovie({ selectedId, onCloseMovie }) {
     Director: director,
     Genree: genre,
   } = movieDetails;
+
+  function handleAddWatched() {
+    const newMovie = {
+      id: selectedId,
+      poster,
+      title,
+      year,
+      userRating,
+      imdbRating: Number(imdbRating),
+      runtime: Number(runtime.split(" ")[0]),
+    };
+    onAddWatched(newMovie);
+    onCloseMovie();
+  }
 
   const getMovieDetails = async () => {
     setIsLoading(true);
@@ -72,12 +100,23 @@ function SelectedMovie({ selectedId, onCloseMovie }) {
             </div>
           </header>
           <section>
-            <StarRating
-              maxRating={10}
-              color="black"
-              onRating={setMovieRating}
-            />
-            <p>You rate {movieRating} stars at this movie.</p>
+            {!isWatched ? (
+              <div className="rating">
+                <StarRating
+                  maxRating={10}
+                  color="black"
+                  onSetUserRating={setUserRating}
+                />
+                {userRating > 0 && (
+                  <button onClick={handleAddWatched}>+ Add to list</button>
+                )}
+              </div>
+            ) : (
+              <p>
+                You rated <span>⭐️</span> {watchedUserRating} stars at this
+                movie.
+              </p>
+            )}
             <p>
               <em>{plot}</em>
             </p>
@@ -91,4 +130,4 @@ function SelectedMovie({ selectedId, onCloseMovie }) {
   );
 }
 
-export default SelectedMovie;
+export default MovieDetails;

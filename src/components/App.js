@@ -17,6 +17,7 @@ function App() {
   const [error, setError] = useState("");
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState("");
+  const [watchedMovies, setWatchedMovies] = useState([]);
 
   function handleSelectMovie(id) {
     setSelectedId((selectedId) => (id === selectedId ? "" : id));
@@ -24,6 +25,14 @@ function App() {
 
   function handleCloseMovie() {
     setSelectedId("");
+  }
+
+  function addWatchedMovie(movie) {
+    const confirmed = window.confirm("Would you like to add movie?");
+    if (confirmed) {
+      setWatchedMovies((watchedMovies) => [...watchedMovies, movie]);
+      window.alert("Add Success!");
+    }
   }
 
   const getMovieData = async () => {
@@ -90,6 +99,8 @@ function App() {
               selectedId={selectedId}
               setSelectedId={setSelectedId}
               onCloseMovie={handleCloseMovie}
+              onAddWatched={addWatchedMovie}
+              watchedMovies={watchedMovies}
             />
           ) : (
             <></>

@@ -24,14 +24,14 @@ function StarRating({
   color = "#fcc419",
   size = 24,
   defaultRating = 0,
-  onRating,
+  onSetUserRating,
 }) {
   const [rating, setRating] = useState(defaultRating);
   const [tmpRating, setTmpRating] = useState(0);
 
   function handleRating(rating) {
     setRating(rating);
-    onRating(rating);
+    onSetUserRating(rating);
   }
 
   const textStyle = {
