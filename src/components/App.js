@@ -21,6 +21,8 @@ function App() {
   const [selectedId, setSelectedId] = useState("");
   const [watchedMovies, setWatchedMovies] = useState([]);
 
+  const controller = new AbortController();
+
   function handleSelectMovie(id) {
     setSelectedId((selectedId) => (id === selectedId ? "" : id));
   }
@@ -50,7 +52,9 @@ function App() {
   const getMovieData = async () => {
     setIsLoading(true);
     setError("");
-    await fetch(`https://www.omdbapi.com/?apikey=${KEY_E}&s=${query}`)
+    await fetch(`https://www.omdbapi.com/?apikey=${KEY_E}&s=${query}`, {
+      signal: controller.signal,
+    })
       .then((res) => {
         if (!res.ok) {
           throw new Error("Something went wrong! You can't get data");
@@ -73,8 +77,10 @@ function App() {
         );
       })
       .catch((err) => {
-        setError(err.message);
-        console.log(err.message);
+        if (err.name !== "AbortError") {
+          setError(err.message);
+          console.log(err.message);
+        }
       })
       .finally(() => {
         setIsLoading(false);
@@ -88,6 +94,10 @@ function App() {
       return;
     }
     getMovieData();
+
+    return () => {
+      controller.abort();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
