@@ -93,6 +93,8 @@ function App() {
       setError("");
       return;
     }
+
+    handleCloseMovie(); // when searching new movie -> close MovieDetails
     getMovieData();
 
     return () => {
