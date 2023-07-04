@@ -19,7 +19,15 @@ function App() {
   const [error, setError] = useState("");
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState("");
-  const [watchedMovies, setWatchedMovies] = useState([]);
+  // const [watchedMovies, setWatchedMovies] = useState([]);
+
+  // React will call the function on the initial render
+  // Value returned from function -> initial value of the state
+  // Cannot receive any arguments (pure function)
+  const [watchedMovies, setWatchedMovies] = useState(() => {
+    const storedData = JSON.parse(localStorage.getItem("watchedMovies"));
+    return storedData;
+  });
 
   const controller = new AbortController();
 
@@ -48,6 +56,11 @@ function App() {
       window.alert("Delete Success!");
     }
   }
+
+  useEffect(() => {
+    // local storage에 저장
+    localStorage.setItem("watchedMovies", JSON.stringify(watchedMovies));
+  }, [watchedMovies]);
 
   const getMovieData = async () => {
     setIsLoading(true);
@@ -121,7 +134,6 @@ function App() {
           {selectedId ? (
             <MovieDetails
               selectedId={selectedId}
-              setSelectedId={setSelectedId}
               onCloseMovie={handleCloseMovie}
               onAddWatched={addWatchedMovie}
               watchedMovies={watchedMovies}
