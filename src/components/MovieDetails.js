@@ -51,6 +51,21 @@ function MovieDetails({
     onCloseMovie();
   }
 
+  useEffect(() => {
+    function callback(e) {
+      if (e.code === "Escape") {
+        onCloseMovie();
+        console.log("close movie details with esc");
+      }
+    }
+    document.addEventListener("keydown", callback); // keydown : it occurs when we push keyboard
+
+    return () => {
+      document.removeEventListener("keydown", callback);
+      console.log("closing");
+    };
+  }, [onCloseMovie]);
+
   const getMovieDetails = async () => {
     setIsLoading(true);
     setError("");
