@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import StarRating from "./StarRating";
 import Loader from "./Loader";
 import ErrorMessage from "./ErrorMessage";
+import useKey from "../hooks/useKey";
 
 const KEY_E = process.env.REACT_APP_MOVIE_API_KEY;
 
@@ -51,6 +52,7 @@ function MovieDetails({
     onCloseMovie();
   }
 
+  /*
   useEffect(() => {
     function callback(e) {
       if (e.code === "Escape") {
@@ -58,13 +60,18 @@ function MovieDetails({
         console.log("close movie details with esc");
       }
     }
-    document.addEventListener("keydown", callback); // keydown : it occurs when we push keyboard
+    // keydown : it occurs when we push keyboard
+    document.addEventListener("keydown", callback);
 
     return () => {
       document.removeEventListener("keydown", callback);
       console.log("closing");
     };
   }, [onCloseMovie]);
+  */
+
+  // Using Custom Hooks
+  useKey("Escape", onCloseMovie);
 
   const getMovieDetails = async () => {
     setIsLoading(true);
